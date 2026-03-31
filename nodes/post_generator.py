@@ -66,6 +66,4 @@ def generate_post(state: AgentState) -> AgentState:
         except Exception as e:
             print(f"  ⚠️  Attempt {attempt} failed: {e}")
 
-    breakpoint()
-
     return {**state, "error": "Post generation failed after 3 attempts."}
