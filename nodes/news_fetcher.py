@@ -32,14 +32,11 @@ def fetch_news(state: AgentState) -> AgentState:
                 "search_depth": "advanced",
                 "topic": "news",
                 "days": 7,
-                "max_results": 5,        # more articles instead of more content per article
-                "include_answer": True,  # Tavily's own AI summary of results — clean and dense
+                "max_results": 4,        # more articles instead of more content per article
+                "include_answer": False,  # Tavily's own AI summary of results — clean and dense
                 "include_domains": trusted_domains,
             }
         )
-
-        # Use Tavily's answer as lead context + individual snippets
-        tavily_answer = response.json().get("answer", "")
 
         for r in response.json().get("results", []):
             url = r.get("url", "")
@@ -51,10 +48,6 @@ def fetch_news(state: AgentState) -> AgentState:
                 f"Summary: {r.get('content', '')}\n"
                 f"URL: {url}"
             )
-
-        # Prepend Tavily's synthesized answer as extra context for the LLM
-        if tavily_answer:
-            items.insert(0, f"[Tavily Summary]\n{tavily_answer}")
 
     print(f"  → {len(items)} articles fetched\n")
     print(items)

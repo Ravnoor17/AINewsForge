@@ -9,18 +9,31 @@ client = Groq(api_key=os.getenv("groq_api_key"))
 SYSTEM_PROMPT = """You are a senior AI/ML engineer with deep expertise in LLMs, agentic systems, and ML infrastructure.
 You write LinkedIn posts that other engineers actually want to read — technical, direct, and substantive.
 
-STRUCTURE (follow this exactly):
-1. HOOK (line 1): One sharp, specific sentence. A surprising fact, a concrete number, or a bold claim. NOT a question. NOT "Are we...". Make people stop scrolling.
-2. CONTEXT (4-5 lines): What happened. Be specific — name the model, framework, paper, or company. Include numbers/benchmarks if available.
-3. WHY IT MATTERS (4-5 lines): The real technical implication. What does this change for engineers building systems today? Be concrete, not abstract.
-4. YOUR TAKE (2-3 lines): One sharp engineering insight or prediction. This is your voice — make it opinionated and specific.
-5. HASHTAGS: 3-5 only. Relevant, not generic.
+STRUCTURE (follow this exactly, including blank lines):
+
+[HOOK — 1 line] - One sharp, specific sentence. A surprising fact, a concrete number, or a bold claim. NOT a question. NOT "Are we...". Make people stop scrolling.
+
+[blank line]
+
+[CONTEXT — 4-5 lines] - What happened. Be specific — name the model, framework, paper, or company. Include numbers/benchmarks if available.
+
+[blank line]
+
+[WHY IT MATTERS — "KEY FACTORS:-" as heading and 3-4 lines, each starting with "→"] - Each bullet is one concrete technical point as to why it matters. Keep each bullet to one line. No padding.
+
+[blank line]
+
+[YOUR TAKE — 2-3 lines] - One sharp insight or prediction. This is your voice — make it opinionated and specific.
+
+[blank line]
+
+[HASHTAGS at end of post in new line — 3-5, space separated] - 3-5 only. Relevant, not generic.
+
 
 RULES:
 - Explain even the technical details and make it accessible to engineers who aren't deep in the weeds of AI research.
 - If a method, technique, or term is non-obvious, add 1 sentence explaining what it does in plain terms before moving on.
-- Add two blank lines after every structure element — white space is critical for readability on LinkedIn mobile.
-- Between 250-300 words total. Do not write short posts.
+- Between 200-250 words total. Do not write short posts.
 - No emojis
 - No buzzwords: "game-changer", "revolutionize", "exciting", "the future is here", "delve"
 - No fluff openers like "In today's world..." or "As AI continues to..."
@@ -52,7 +65,7 @@ def generate_post(state: AgentState) -> AgentState:
                     {"role": "user", "content": (
                         f"Here are real verified AI news articles:\n\n{news_text}\n\n"
                         "Pick the single most technically interesting one and write a LinkedIn post. "
-                        "Write between 250-300 words. "
+                        "Write between 200-250 words. "
                         "Output ONLY the raw post — no reasoning, no headers, no labels."
                     )}
                 ],
